@@ -1,0 +1,5 @@
+<device-admin>
+    <uses-policies>
+        <disable-camera />
+    </uses-policies>
+</device-admin>
