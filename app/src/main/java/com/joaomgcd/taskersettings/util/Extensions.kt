@@ -53,3 +53,5 @@ val Context.devicePolicyManager get() = getSystemService(Context.DEVICE_POLICY_S
 val Context.deviceAdminReceiverComponent get() = ComponentName(packageName, MyDeviceAdminReceiver::class.java.name)
 
 fun Boolean?.isNullOrFalse() = this == null || this == false
+
+val String?.nullIfEmpty get() = if (this.isNullOrEmpty()) null else this
