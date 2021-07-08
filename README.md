@@ -1,6 +1,7 @@
 # TaskerSettings
 Helper app for Tasker
 
+## Wifi Toggling
 Google has changed the way Android works for apps that target API 29, so Tasker can't toggle wifi anymore. Check here for more details: https://issuetracker.google.com/issues/128554616 
 
 If you want to better understand what "targeting" an API means, check here: https://tasker.joaoapps.com/userguide/en/target_api.html 
@@ -15,3 +16,12 @@ I can't upload this version to Google Play because it targets API 21 (which is w
 Note: your phone may warn you that this app is built for an older Android version. That's normal (and precisely why this app can still toggle wifi), so please dismiss the warning because it's nothing to worry about.
 
 Download here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.2.0/TaskerSettings.apk
+
+## Wifi Connecting
+Forcing connection to a certain WiFi Network used to be a feature in [AutoTools](https://play.google.com/store/apps/details?id=com.joaomgcd.autotools). Since AutoTools is now required to target API 29 (read above for more info about API targets) it can't do that anymore.
+
+This feature was now added to Tasker itself in the **Connect to Wifi** action and Tasker uses the **Tasker Settings** helper app to do this.
+
+If you want to use the **Connect To Wifi** action in Tasker download this version: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.3.0/TaskerSettings.apk
+
+**Important Note**: on some devices the app will ask you for location permissions, but when you try to grant them the system app will crash. To work around this go to Android Settings > Apps > **Tasker Settings** > Permissions > Location and enable the permission. It should correctly after you do that.
