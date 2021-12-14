@@ -2,11 +2,9 @@ package com.joaomgcd.taskersettings.actions
 
 import android.content.Context
 import android.support.annotation.Keep
-import com.joaomgcd.taskerbackcompat.util.json
-import com.joaomgcd.taskerbackcompat.util.linesInBackgroundThread
-import com.joaomgcd.taskerbackcompat.util.onErrorIfHasObservers
-import com.joaomgcd.taskerbackcompat.util.textInBackgroundThread
+import com.joaomgcd.taskerbackcompat.util.*
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.SingleSubject
 import net.dinglisch.android.tasker.PluginResult
 import java.io.*
@@ -14,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 @Keep
 class InputRunShell(val command: String, val timeoutMilliseconds: Long, val useRoot: Boolean, val useGlobalNamespace: Boolean)
+
 @Keep
 class OutputRunShell(val output: String?)
 class ActionRunShell(context: Context, payloadString: String) : Action<InputRunShell>(context, payloadString) {
@@ -37,12 +36,10 @@ class ActionRunShell(context: Context, payloadString: String) : Action<InputRunS
                 flush()
                 close()
             }
-
-            val (outputText, outputError) = Single.merge(process.inputStream.linesInBackgroundThread.withTimeout, process.errorStream.linesInBackgroundThread.withTimeout).toList().blockingGet()
             fun List<String>.fromLines() = joinToString("\n").trim()
-            val errorMessage = outputError.fromLines()
-            val output = outputText.fromLines()
-            pluginResultSubject.onSuccess(PluginResult(errorMessage.isEmpty(), errorMessage = errorMessage, payloadJson = OutputRunShell(output).json))
+            val outputStreams = process.inputStream.linesInBackgroundThread.withTimeout + process.errorStream.linesInBackgroundThread.withTimeout
+            val (output, errorMessage) = outputStreams.blockingGet()
+            pluginResultSubject.onSuccess(PluginResult(errorMessage.isEmpty(), errorMessage = errorMessage.fromLines(), payloadJson = OutputRunShell(output.fromLines()).json))
         } catch (t: Throwable) {
             process?.destroy()
             pluginResultSubject.onErrorIfHasObservers(t)
