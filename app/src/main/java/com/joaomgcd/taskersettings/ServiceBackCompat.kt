@@ -15,6 +15,7 @@ private const val EXTRA_NEEDED_PERMISSIONS = "com.joaomgcd.taskersettings.EXTRA_
 private const val EXTRA_NEW_STATE = "com.joaomgcd.taskersettings.EXTRA_NEW_STATE"
 private const val EXTRA_INPUT = "com.joaomgcd.taskersettings.EXTRA_INPUT"
 private const val EXTRA_TYPE = "com.joaomgcd.taskersettings.EXTRA_TYPE"
+private const val EXTRA_PAYLOAD_JSON = "com.joaomgcd.taskersettings.EXTRA_PAYLOAD_JSON"
 
 class ServiceBackCompat : IntentService("ServiceRun") {
     private fun ResultReceiver.cancel(message: String, logs: Array<String>? = null) = send(Activity.RESULT_CANCELED, getResultBundle(false, message))
@@ -26,6 +27,7 @@ class ServiceBackCompat : IntentService("ServiceRun") {
                 }
                 putStringArray(EXTRA_LOGS, result.logs)
                 putStringArray(EXTRA_NEEDED_PERMISSIONS, result.permissionsNeeded)
+                putString(EXTRA_PAYLOAD_JSON, result.payloadJson)
                 result.newState?.let { putBoolean(EXTRA_NEW_STATE, it) }
             }
 

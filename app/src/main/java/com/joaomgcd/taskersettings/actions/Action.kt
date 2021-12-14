@@ -11,7 +11,7 @@ import net.dinglisch.android.tasker.PluginResult
 abstract class Action<TRunPayload>(val context: Context, val payloadString: String) {
     fun debugger(log: String) = logs.add(log)
     val logs by lazy { arrayListOf<String>() }
-    val input: TRunPayload by lazy { payloadString.fromJson<TRunPayload>(payloadClass) }
+    val input: TRunPayload by lazy { payloadString.fromJson(payloadClass) }
     fun run(): Single<PluginResult> {
         return getResultInBackground {
             val notGrantedPermissions = notGrantedPermissions
