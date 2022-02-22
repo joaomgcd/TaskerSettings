@@ -25,3 +25,15 @@ This feature was now added to Tasker itself in the **Connect to Wifi** action an
 If you want to use the **Connect To Wifi** action in Tasker download this version: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.3.0/TaskerSettings.apk
 
 **Important Note**: on some devices the app will ask you for location permissions, but when you try to grant them the system app will crash. To work around this go to Android Settings > Apps > **Tasker Settings** > Permissions > Location and enable the permission. It should correctly after you do that.
+
+## Run Shell
+Since Tasker started targeting API 30 some shell commands (like "ip neigh") stopped working.
+
+With version 1.4.0 of **Tasker Settings** you can get that working again by selecting the **Use Tasker Settings** option in the **Run Shell** action in Tasker.
+
+Use
+
+- **Tasker 5.15.6** or above
+- **Tasker Settings 1.4.0** or above
+
+Download Tasker Settings 1.4.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.4.0/Tasker.Settings.1.4.0.apk
