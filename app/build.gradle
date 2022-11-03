@@ -26,6 +26,17 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    flavorDimensions "apiTarget"
+    productFlavors {
+        api21{
+            dimension "apiTarget"
+            targetSdkVersion project.ext.targetSdkVersion
+        }
+        api23{
+            dimension "apiTarget"
+            targetSdkVersion 23
+        }
+    }
 }
 
 dependencies {
