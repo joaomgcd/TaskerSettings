@@ -1,7 +1,7 @@
 package com.joaomgcd.taskersettings.actions
 
 import android.content.Context
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.*
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction

@@ -3,8 +3,11 @@ package com.joaomgcd.taskerbackcompat.util
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
 import com.google.gson.Gson
 import com.joaomgcd.taskersettings.admin.MyDeviceAdminReceiver
 import io.reactivex.Completable
@@ -12,6 +15,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.SingleSubject
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStream
 import java.io.PrintWriter
 import java.io.StringWriter

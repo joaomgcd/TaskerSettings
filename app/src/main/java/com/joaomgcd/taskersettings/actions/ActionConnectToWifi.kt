@@ -3,7 +3,7 @@ package com.joaomgcd.taskersettings.actions
 import android.Manifest
 import android.content.Context
 import android.net.wifi.WifiManager
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.nullIfEmpty
 import net.dinglisch.android.tasker.PluginResult
 

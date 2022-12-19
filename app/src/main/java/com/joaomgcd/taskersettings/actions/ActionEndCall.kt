@@ -2,7 +2,7 @@ package com.joaomgcd.taskersettings.actions
 
 import android.Manifest
 import android.content.Context
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import android.telecom.TelecomManager
 import net.dinglisch.android.tasker.PluginResult
 

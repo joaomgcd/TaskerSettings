@@ -2,7 +2,7 @@ package com.joaomgcd.taskersettings.actions
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.deviceAdminReceiverComponent
 import com.joaomgcd.taskerbackcompat.util.devicePolicyManager
 import com.joaomgcd.taskerbackcompat.util.isNullOrFalse

@@ -3,7 +3,7 @@ package net.dinglisch.android.tasker
 import android.os.Handler
 import android.os.Parcelable
 import android.os.ResultReceiver
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.json
 import kotlinx.android.parcel.Parcelize
 
