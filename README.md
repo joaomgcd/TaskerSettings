@@ -46,7 +46,7 @@ With version 1.5.0 of **Tasker Settings** you can get that working again because
 
 Use
 
-- **Tasker 6.1.6-beta** or above
+- **Tasker 6.1.7-beta** or above
 - **Tasker Settings 1.5.0** or above
 
 Download Tasker Settings 1.5.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.5.0/Tasker.Settings.1.5.0.apk
