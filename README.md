@@ -37,3 +37,16 @@ Use
 - **Tasker Settings 1.4.0** or above
 
 Download Tasker Settings 1.4.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.4.0/Tasker.Settings.1.4.0.apk
+
+
+## Open File action for APK files
+On November 2022 Google blocked Tasker from having the **android.permission.REQUEST_INSTALL_PACKAGES** permission on Google Play which means that Tasker wasn't able to request installation of APK files anymore using the **Open File** action like before.
+
+With version 1.5.0 of **Tasker Settings** you can get that working again because Tasker will now relay this function to it.
+
+Use
+
+- **Tasker 6.1.6-beta** or above
+- **Tasker Settings 1.5.0** or above
+
+Download Tasker Settings 1.5.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.5.0/Tasker.Settings.1.5.0.apk
