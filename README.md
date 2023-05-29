@@ -50,3 +50,16 @@ Use
 - **Tasker Settings 1.5.0** or above
 
 Download Tasker Settings 1.5.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.5.0/Tasker.Settings.1.5.0.apk
+
+## Toggle Bluetooth
+On May 2023 Tasker had to update its [Target API](https://tasker.joaoapps.com/userguide/en/target_api.html) to 33 blocking it from being able to toggle Bluetooth on your device. This is expected behaviour as documented [here](https://developer.android.com/reference/android/bluetooth/BluetoothAdapter#enable()).
+
+Version 1.6.0 of **Tasker Settings** works around that by having Tasker relaying that feature to it. Since **Tasker Settings** still targets a lower Target API it can still perform the action normally.
+
+Use
+
+- **Tasker 6.2.2-beta** or above
+- **Tasker Settings 1.6.0** or above
+
+Download Tasker Settings 1.6.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.6.0/Tasker.Settings.1.6.0.apk
+
