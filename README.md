@@ -61,5 +61,5 @@ Use
 - **Tasker 6.2.2-beta** or above
 - **Tasker Settings 1.6.0** or above
 
-Download Tasker Settings 1.6.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v1.6.0/Tasker.Settings.1.6.0.apk
+Download Tasker Settings 1.6.0 here: https://github.com/joaomgcd/TaskerSettings/releases/download/v.1.6.0/Tasker.Settings.1.6.0.apk
 
