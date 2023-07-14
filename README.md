@@ -1,6 +1,12 @@
 # TaskerSettings
 Helper app for Tasker
 
+**Important Note**: Android 14+ doesn't allow Tasker Settings to be installed normally. You have to install it via ADB using the following command:
+
+```adb install --bypass-low-target-sdk-block FILENAME.apk``` 
+
+Unfortunately there's nothing I can do to change that.
+
 ## Wifi Toggling
 Google has changed the way Android works for apps that target API 29, so Tasker can't toggle wifi anymore. Check here for more details: https://issuetracker.google.com/issues/128554616 
 
