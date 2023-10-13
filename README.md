@@ -7,6 +7,9 @@ Helper app for Tasker
 
 Unfortunately there's nothing I can do to change that.
 
+**Note:** If it gives you a permission error, make sure to enable developer options and then disable the **Check apps installed via USB** option.
+
+
 ## Wifi Toggling
 Google has changed the way Android works for apps that target API 29, so Tasker can't toggle wifi anymore. Check here for more details: https://issuetracker.google.com/issues/128554616 
 
