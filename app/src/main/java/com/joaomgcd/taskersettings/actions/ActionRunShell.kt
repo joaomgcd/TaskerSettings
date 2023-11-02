@@ -2,13 +2,15 @@ package com.joaomgcd.taskersettings.actions
 
 import android.content.Context
 import androidx.annotation.Keep
-import com.joaomgcd.taskerbackcompat.util.*
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.SingleSubject
+import com.joaomgcd.taskerbackcompat.util.json
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import net.dinglisch.android.tasker.PluginResult
-import java.io.*
-import java.util.concurrent.TimeUnit
+import java.io.BufferedReader
+import java.io.InputStream
 
 @Keep
 class InputRunShell(val command: String, val timeoutMilliseconds: Long, val useRoot: Boolean, val useGlobalNamespace: Boolean)
@@ -17,10 +19,17 @@ class InputRunShell(val command: String, val timeoutMilliseconds: Long, val useR
 class OutputRunShell(val output: String?)
 class ActionRunShell(context: Context, payloadString: String) : Action<InputRunShell>(context, payloadString) {
     override val payloadClass = InputRunShell::class.java
+    val InputStream.lines get() = this.bufferedReader().use(BufferedReader::readLines)
+    private suspend fun InputStream.linesInBackgroundThread(): Deferred<List<String>> = withContext(Dispatchers.IO) {
+        async {
+            withTimeout(input.timeoutMilliseconds) {
+                lines
+            }
+        }
+    }
 
-    private val <T> Single<T>.withTimeout get() = this.timeout(input.timeoutMilliseconds, TimeUnit.MILLISECONDS)
-    override fun runSpecific(): PluginResult {
-        val pluginResultSubject = SingleSubject.create<PluginResult>()
+
+    override suspend fun runSpecific(): PluginResult {
         var process: Process? = null
         try {
             val finalCommand = if (input.useRoot) {
@@ -36,16 +45,22 @@ class ActionRunShell(context: Context, payloadString: String) : Action<InputRunS
                 flush()
                 close()
             }
+            withTimeout(input.timeoutMilliseconds) {
+
+            }
             fun List<String>.fromLines() = joinToString("\n").trim()
-            val outputStreams = process.inputStream.linesInBackgroundThread.withTimeout + process.errorStream.linesInBackgroundThread.withTimeout
-            val (output, errorMessage) = outputStreams.blockingGet()
-            pluginResultSubject.onSuccess(PluginResult(errorMessage.isEmpty(), errorMessage = errorMessage.fromLines(), payloadJson = OutputRunShell(output.fromLines()).json))
+            val result = withContext(Dispatchers.IO) {
+                val outputInputStreamAsync = process.inputStream.linesInBackgroundThread()
+                val outputErrorStreamAsync = process.errorStream.linesInBackgroundThread()
+                val outputInputStream = outputInputStreamAsync.await()
+                val outputErrorStream = outputErrorStreamAsync.await()
+                PluginResult(outputErrorStream.isEmpty(), errorMessage = outputErrorStream.fromLines(), payloadJson = OutputRunShell(outputInputStream.fromLines()).json)
+            }
+            return result
         } catch (t: Throwable) {
             process?.destroy()
-            pluginResultSubject.onErrorIfHasObservers(t)
+            throw t
         }
-
-        return pluginResultSubject.withTimeout.blockingGet()
     }
 
 }

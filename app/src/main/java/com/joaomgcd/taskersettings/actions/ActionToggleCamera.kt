@@ -14,7 +14,7 @@ class InputToggleBackCompat(val toggle: Boolean,val enabled:Boolean)
 
 class ActionToggleCamera(context: Context, payloadString: String) : Action<InputToggleBackCompat>(context, payloadString) {
     override val payloadClass = InputToggleBackCompat::class.java
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val manager = context.devicePolicyManager ?: return PluginResult(false,"Couldn't get policy manager")
 
         val state = if(input.toggle) isOn else !input.enabled

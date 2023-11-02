@@ -19,7 +19,7 @@ class OutputOpenFile()
 class ActionOpenFile(context: Context, payloadString: String) : Action<InputOpenFile>(context, payloadString) {
     override val payloadClass = InputOpenFile::class.java
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         return try {
             val uri: Uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", File(input.path))
             val intent = Intent(Intent.ACTION_VIEW).apply {

@@ -13,7 +13,7 @@ class ActionToggleWifi(context: Context, payloadString: String) : Action<InputTo
     override val payloadClass = InputToggleWifi::class.java
 //    override val neededPermissions get() = arrayOf(Manifest.permission.WRITE_SECURE_SETTINGS)
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager? ?: return PluginResult(false,"Couldn't get wifi manager")
 
         wifiManager.isWifiEnabled = input.value

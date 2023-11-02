@@ -14,7 +14,7 @@ class ActionConnectToWifi(context: Context, payloadString: String) : Action<Inpu
     override val payloadClass = InputConnectToWifi::class.java
     override val neededPermissions get() = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager? ?: return PluginResult(false, "Couldn't get wifi manager")
 
         val configuredNetworks = wifiManager.configuredNetworks

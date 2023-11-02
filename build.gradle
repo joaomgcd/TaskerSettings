@@ -29,8 +29,8 @@ allprojects {
         compileSdkVersion = 33
         minSdkVersion = 21
         targetSdkVersion = 21
-        versionCode = 9
-        versionName = "1.6.0"
+        versionCode = 10
+        versionName = "1.7.0"
         buildToolsVersion = '27.0.3'
         supportLibraryVersion = '28.0.0'
     }

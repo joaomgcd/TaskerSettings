@@ -13,7 +13,7 @@ class ActionDisplayDensity(context: Context, payloadString: String) : Action<Inp
     override val payloadClass = InputDisplayDensity::class.java
     override val neededPermissions get() = arrayOf(Manifest.permission.WRITE_SECURE_SETTINGS)
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val windowManagerService = WindowManagerGlobal.windowManagerService
         windowManagerService.setDisplayDensity(input.value)
         return PluginResult(true)

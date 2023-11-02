@@ -19,9 +19,9 @@ class ActionToggleBluetooth(context: Context, payloadString: String) : Action<In
         manager.adapter
     }
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val couldToggle = if (input.value) bluetoothAdapter.enable() else bluetoothAdapter.disable()
-        return PluginResult(couldToggle)
+        return PluginResult(couldToggle, if (!couldToggle) "Tasker Settings doesn't have nearby or Bluetooth permissions?" else null)
     }
 
 }

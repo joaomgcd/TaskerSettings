@@ -36,12 +36,16 @@
             android:name=".ServiceBackCompat"
             android:exported="true"
             android:permission="com.joaomgcd.taskersettings.SET_SETTING" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".util.ActivitySuspend"
+            android:theme="@style/Invisible" />
 
         <receiver
             android:name=".admin.MyDeviceAdminReceiver"
@@ -62,6 +66,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service
+            android:name=".vpn.VpnServiceNetworkAccess"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

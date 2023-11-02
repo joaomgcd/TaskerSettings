@@ -14,7 +14,7 @@ class ActionEndCall(context: Context, payloadString: String) : Action<InputEndCa
     override val payloadClass = InputEndCall::class.java
 //    override val neededPermissions get() = arrayOf(Manifest.permission.ANSWER_PHONE_CALLS)
 
-    override fun runSpecific(): PluginResult {
+    override suspend fun runSpecific(): PluginResult {
         val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager?
                 ?: return PluginResult(false, "Couldn't get telecom manager")
         val result = telecomManager.endCall()
