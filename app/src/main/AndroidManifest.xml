@@ -45,6 +45,9 @@
         </activity>
         <activity
             android:name=".util.ActivitySuspend"
+            android:configChanges="orientation|screenSize"
+            android:enabled="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Invisible" />
 
         <receiver

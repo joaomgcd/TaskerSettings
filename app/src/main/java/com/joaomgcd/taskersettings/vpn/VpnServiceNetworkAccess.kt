@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import android.util.Log
+import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.CoroutineScopeIO
 import com.joaomgcd.taskersettings.util.startActivityForResult
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ import java.io.InputStream
 class VpnServiceNetworkAccess : VpnService() {
     private val coroutineScope = CoroutineScopeIO()
 
+    @Keep
     enum class Mode { AllowAll, Allow, DenyAll, Deny }
 
     // ---------------------- INSTANCE FUNCS -------------------------- //

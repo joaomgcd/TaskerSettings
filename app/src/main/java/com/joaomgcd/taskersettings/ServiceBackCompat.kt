@@ -21,7 +21,7 @@ private const val EXTRA_NEW_STATE = "com.joaomgcd.taskersettings.EXTRA_NEW_STATE
 private const val EXTRA_PAYLOAD_JSON = "com.joaomgcd.taskersettings.EXTRA_PAYLOAD_JSON"
 private const val EXTRA_INPUT = "com.joaomgcd.taskersettings.EXTRA_INPUT"
 private const val EXTRA_TYPE = "com.joaomgcd.taskersettings.EXTRA_TYPE"
-private suspend fun Context.runAction(bundle: Bundle?, callback: (PluginResult) -> Unit) {
+private suspend fun Context.runAction(bundle: Bundle?): PluginResult {
     val logs = arrayListOf<String>()
 
     try {
@@ -40,11 +40,9 @@ private suspend fun Context.runAction(bundle: Bundle?, callback: (PluginResult) 
         val action = Action.getActionFromType(this, type, input)
         val pluginResult = action.run()
         pluginResult.logs = logs.toTypedArray()
-        return callback(pluginResult)
+        return pluginResult
     } catch (t: ServiceBackCompat.ActionRunnerException) {
-        return callback(PluginResult(false, t.message, logs.toTypedArray()))
-    } catch (t: Throwable) {
-        return callback(PluginResult(false, t.stackTraceString))
+        return PluginResult(false, t.message, logs.toTypedArray())
     }
 
 }
@@ -66,14 +64,18 @@ class ServiceBackCompat : IntentServiceParallel() {
 
     class ActionRunnerException(message: String) : Exception(message)
 
+    private val Throwable.resultBundle get() = PluginResult(false, stackTraceString).resultBundle
 
     override suspend fun onHandleIntent(intent: Intent) {
         val resultReceiver: ResultReceiver = intent.getParcelableExtra(EXTRA_PLUGIN_RECEIVER) ?: return
 
         "run action intent service".log()
-        runAction(intent.extras) {
-            val resultCode = if (it.success) Activity.RESULT_OK else Activity.RESULT_CANCELED
-            resultReceiver.send(resultCode, it.resultBundle)
+        try {
+            val pluginResult = runAction(intent.extras)
+            val resultCode = if (pluginResult.success) Activity.RESULT_OK else Activity.RESULT_CANCELED
+            resultReceiver.send(resultCode, pluginResult.resultBundle)
+        } catch (t: Throwable) {
+            resultReceiver.send(Activity.RESULT_CANCELED, t.resultBundle)
         }
     }
 
@@ -82,8 +84,11 @@ class ServiceBackCompat : IntentServiceParallel() {
             override fun doBackCompatAction(bundle: Bundle?, callback: IServiceBackCompatCallback) {
                 coroutineScope.launch {
                     "run action binder".log()
-                    runAction(bundle) {
-                        tryGetOrNull { callback.handleResult(it.resultBundle) }
+                    try {
+                        val pluginResult = runAction(bundle)
+                        tryGetOrNull { callback.handleResult(pluginResult.resultBundle) }
+                    } catch (t: Throwable) {
+                        callback.handleResult(t.resultBundle)
                     }
                 }
             }
