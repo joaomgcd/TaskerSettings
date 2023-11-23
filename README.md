@@ -10,6 +10,7 @@ Unfortunately there's nothing I can do to change that.
 You can setup ADB on your PC as described [here](https://tasker.joaoapps.com/userguide/en/help/ah_adb_setup.html).
 
 **Note:** If it gives you a permission error, make sure to enable developer options and then disable the **Check apps installed via USB** option.
+
 **Note 2**: For reasons unknown, some antivirus programs may erroneously flag Tasker Settings as containing a virus or trojan. However, this is not the case. Tasker Settings is an open-source app, enabling you to scrutinize its code and functionality. If you opt not to install it, that decision is entirely yours to make. Rest assured, there is no actual threat. 😅
 
 
