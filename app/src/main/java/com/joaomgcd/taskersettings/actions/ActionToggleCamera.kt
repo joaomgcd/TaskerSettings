@@ -1,12 +1,10 @@
 package com.joaomgcd.taskersettings.actions
 
 import android.content.Context
-import android.net.wifi.WifiManager
 import androidx.annotation.Keep
 import com.joaomgcd.taskerbackcompat.util.deviceAdminReceiverComponent
 import com.joaomgcd.taskerbackcompat.util.devicePolicyManager
 import com.joaomgcd.taskerbackcompat.util.isNullOrFalse
-import com.joaomgcd.taskerm.windowmanager.WindowManagerGlobal
 import net.dinglisch.android.tasker.PluginResult
 
 @Keep
@@ -22,7 +20,7 @@ class ActionToggleCamera(context: Context, payloadString: String) : Action<Input
             manager.setCameraDisabled(context.deviceAdminReceiverComponent, state)
             return PluginResult(true, newState = !state)
         }catch (t:Throwable){
-            return PluginResult(false,"Couldn't change setting. Make sure the Tasker Settings app (not Tasker itself) is a device administator.")
+            return PluginResult(false,"Couldn't change setting. Make sure the Tasker Settings app (not Tasker itself) is a device administator. Error: " + t.message)
         }
     }
     val isOn: Boolean

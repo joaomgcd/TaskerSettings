@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.MANAGE_DEVICE_POLICY_CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -37,7 +38,8 @@
             android:exported="true"
             android:permission="com.joaomgcd.taskersettings.SET_SETTING" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,6 +53,7 @@
             android:theme="@style/Invisible" />
 
         <receiver
+            android:exported="true"
             android:name=".admin.MyDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data

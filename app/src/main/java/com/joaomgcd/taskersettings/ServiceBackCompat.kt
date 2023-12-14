@@ -14,6 +14,7 @@ import com.joaomgcd.taskersettings.actions.Action
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import net.dinglisch.android.tasker.PluginResult
+import net.dinglisch.android.tasker.PluginResultReceiver
 
 private const val EXTRA_LOGS = "com.joaomgcd.taskersettings.EXTRA_LOGS"
 private const val EXTRA_NEEDED_PERMISSIONS = "com.joaomgcd.taskersettings.EXTRA_NEEDED_PERMISSIONS"
@@ -28,6 +29,7 @@ private suspend fun Context.runAction(bundle: Bundle?): PluginResult {
 
         if (bundle == null) throw ServiceBackCompat.ActionRunnerException("No Input Bundle")
 
+        bundle.classLoader = PluginResultReceiver::class.java.classLoader
         fun log(message: String) = logs.add(message)
         val type = bundle.getString(EXTRA_TYPE)
             ?: throw ServiceBackCompat.ActionRunnerException("No action Type")
