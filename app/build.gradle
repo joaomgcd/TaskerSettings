@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-androidExtensions {
-    experimental = true
-}
+apply plugin: 'dev.rikka.tools.refine'
+apply plugin: 'kotlin-parcelize'
+
 android {
+    namespace = "com.joaomgcd.taskersettings"
     compileSdkVersion project.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.joaomgcd.taskersettings"
@@ -24,10 +24,11 @@ android {
     }
     buildFeatures {
         aidl true
+        buildConfig = true
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     flavorDimensions "apiTarget"
     productFlavors {
@@ -61,4 +62,9 @@ dependencies {
 
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    compileOnly project(':system-api-stubs')
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
+    implementation 'dev.rikka.shizuku:api:13.1.5'
+    implementation 'dev.rikka.shizuku:provider:13.1.5'
 }

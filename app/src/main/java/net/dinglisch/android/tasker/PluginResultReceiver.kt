@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Parcelable
 import android.os.ResultReceiver
 import androidx.annotation.Keep
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Keep
 class PluginResultReceiver(handler: Handler, val receiver: (Int, Bundle?) -> Unit) : ResultReceiver(handler)

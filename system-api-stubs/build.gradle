@@ -1,0 +1,55 @@
+import com.android.build.gradle.tasks.AidlCompile
+
+apply plugin: 'com.android.library'
+// apply plugin: 'delta.lint.java' // Uncomment if you have this plugin
+
+android {
+    namespace = "com.joaomgcd.taskersettings.systemapistubs"
+    compileSdkVersion 36
+
+    defaultConfig {
+        minSdkVersion 30
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        aidl true
+    }
+
+    // It's good practice to include compileOpti
+    // Groovy equivalent of the Java toolchain block
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    afterEvaluate {
+        tasks.withType(AidlCompile).configureEach {
+            doLast {
+                outputs.files.each { fileOrFolder ->
+                    fileOrFolder.eachFileRecurse { file ->
+                        if (file.isFile() && file.name.endsWith('.java')) {
+                            def sanitized = file.getText('UTF-8').replace('\\', '\\\\')
+                            file.write(sanitized, 'UTF-8')
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    // Dependencies translated from your libs.versions.toml
+    implementation 'androidx.annotation:annotation:1.9.1'
+    annotationProcessor 'dev.rikka.tools.refine:annotation-processor:4.4.0'
+    implementation 'dev.rikka.tools.refine:annotation:4.4.0'
+}

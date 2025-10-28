@@ -1,95 +1,152 @@
 package com.joaomgcd.taskersettings
 
-import android.Manifest.permission.ANSWER_PHONE_CALLS
-import android.annotation.TargetApi
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.joaomgcd.taskersettings.util.ShizukuTaskerSettings
+import rikka.shizuku.Shizuku
+import rikka.shizuku.Shizuku.OnRequestPermissionResultListener
 
-//import com.shashank.sony.fancywalkthroughlib.FancyWalkthroughActivity
-//import com.shashank.sony.fancywalkthroughlib.FancyWalkthroughCard
 
-private const val PERMISSION_WRITE_SETTINGS = "android.settings.action.MANAGE_WRITE_SETTINGS"
-private const val PACKAGE_TASKER = "net.dinglisch.android.taskerm"
+class MainActivity : Activity(), OnRequestPermissionResultListener {
+    private var updateShizukuUi: () -> Unit = {}
 
-class MainActivity : /*FancyWalkthroughActivity()*/Activity() {
-//    private fun hasPermissions(): Boolean {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true
-//        return Settings.System.canWrite(this)
-//    }
-
-    //    @TargetApi(Build.VERSION_CODES.M)
-//    override fun onFinishButtonPressed() {
-//        startActivity(if (hasPermissions()) {
-//            if (isTaskerInstalled()) {
-//                packageManager.getLaunchIntentForPackage(PACKAGE_TASKER)
-//            } else {
-//                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$PACKAGE_TASKER"))
-//            }
-//        } else {
-//            Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply { data = Uri.parse("package:$packageName") }
-//        })
-//        disableActivityMain()
-//        finish()
-//    }
-//
-    private fun disableActivityMain() = packageManager.setComponentEnabledSetting(ComponentName(this, MainActivity::class.java), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    companion object {
+        private const val SHIZUKU_REQUEST_CODE = 156
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        disableActivityMain()
 
-        Toast.makeText(this, "App successfully installed. Use Tasker with it.", Toast.LENGTH_LONG).show();
-//        val cardIntro = FancyWalkthroughCard(
-//                "Tasker Settings",
-//                "This is just a helper app for Tasker. It allows you to change some settings that Tasker can't change by itself. This app won't do anything by itself.",
-//                R.mipmap.ic_launcher).setup()
-//        val cardTasker = FancyWalkthroughCard("Tasker Settings",
-//                "Click below to start!",
-//                R.mipmap.ic_launcher).setup()
-//        setOnboardPages(arrayListOf(cardIntro, cardTasker));
-//        showNavigationControls(true);
-//        setColorBackground(R.color.colorAccent);
+        val layout = LinearLayout(this).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding(40, 40, 40, 40)
+        }
+
+        addShizukuLayoutIfNeeded(layout)
+        addDndButtonIfNeeded(layout)
+
+        setContentView(layout)
+
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        val title =
-//                if (hasPermissions()) {
-//                    if (isTaskerInstalled()) {
-//                        "Open Tasker"
-//                    } else {
-//                        "Install Tasker"
-//                    }
-//                } else {
-//                    "Set Permissions"
-//                }
-//        setFinishButtonTitle(title)
-//    }
+    private fun createSectionContainer(): LinearLayout {
+        return LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = 20
+                bottomMargin = 20
+            }
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding(40, 40, 40, 40)
 
-    private fun isTaskerInstalled() = isAppInstalled(this, PACKAGE_TASKER)
-}
-
-fun isAppInstalled(context: Context, packageName: String): Boolean {
-
-    val pm = context.packageManager
-    return try {
-        pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
-        true
-    } catch (e: PackageManager.NameNotFoundException) {
-        false
-    } catch (e: Throwable) {
-        false
+            val border = GradientDrawable()
+            border.setColor(Color.TRANSPARENT)
+            border.setStroke(2, Color.DKGRAY)
+            border.cornerRadius = 20f
+            background = border
+        }
     }
 
-}
+    private class SectionScope(val context: Context, private val container: LinearLayout) {
+        fun <T : View> T.add(): T {
+            container.addView(this)
+            return this
+        }
 
+        fun addButton(buttonText: String, action: () -> Unit) = Button(context).apply {
+            text = buttonText
+            setOnClickListener { action() }
+        }.add()
+
+        fun addText(label: String? = null) = TextView(context).apply {
+            text = label
+            gravity = Gravity.CENTER
+        }.add()
+    }
+
+    private fun section(minApi: Int, layout: LinearLayout, addContent: SectionScope.() -> Unit) {
+        if (Build.VERSION.SDK_INT < minApi) return
+
+        val sectionLayout = createSectionContainer()
+        SectionScope(this, sectionLayout).addContent()
+        layout.addView(sectionLayout)
+    }
+
+    private fun addShizukuLayoutIfNeeded(layout: LinearLayout) = section(Build.VERSION_CODES.BAKLAVA, layout) {
+        addText("On Anadroid 16+, Shizuku is needed for the Wifi Tether action.")
+        val statusTextView = addText().apply {
+            textSize = 18f
+            setPadding(0, 20, 0, 20)
+        }
+        val requestShizukuPermissionButton = addButton("Request Shizuku Permission") { Shizuku.requestPermission(SHIZUKU_REQUEST_CODE) }
+
+        fun update() {
+            if (ShizukuTaskerSettings.isAvailable) {
+                statusTextView.text = "Shizuku status: Available"
+                requestShizukuPermissionButton.visibility = View.GONE
+                return
+            }
+
+            requestShizukuPermissionButton.visibility = View.VISIBLE
+            val status = when {
+                !ShizukuTaskerSettings.isInstalled -> "Shizuku app not installed."
+                !ShizukuTaskerSettings.isRunning -> "Shizuku is installed but not running."
+                !ShizukuTaskerSettings.hasPermission -> "Shizuku is running but permission not granted."
+                else -> "Shizuku is not available for an unknown reason."
+            }
+            statusTextView.text = "Shizuku status: $status"
+        }
+        updateShizukuUi = ::update
+    }
+
+
+    private fun addDndButtonIfNeeded(layout: LinearLayout) = section(Build.VERSION_CODES.VANILLA_ICE_CREAM, layout) {
+
+        addText("On Android 15+, Tasker Settings is needed to turn off Do Not Disturb. Please enable the DND permission for Tasker Settings.").apply {
+            setPadding(0, 0, 0, 20)
+        }
+        addButton("Open DND Settings") { startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Shizuku.addRequestPermissionResultListener(this)
+        updateUi()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Shizuku.removeRequestPermissionResultListener(this)
+    }
+
+    private fun updateUi() {
+        updateShizukuUi()
+    }
+
+
+    override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
+        when (requestCode) {
+            SHIZUKU_REQUEST_CODE -> updateUi()
+        }
+    }
+}
