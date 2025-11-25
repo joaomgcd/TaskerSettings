@@ -1,17 +1,38 @@
 # TaskerSettings
 Helper app for Tasker
 
-**Important Note**: Android 14+ doesn't allow Tasker Settings to be installed normally. You have to install it via ADB using the following command:
+### INSTALLATION INSTRUCTIONS
 
-```adb install --bypass-low-target-sdk-block FILENAME.apk``` 
+Android 14 and newer block the installation of Tasker Settings through the normal process. Please use one of the methods below.
 
-Unfortunately there's nothing I can do to change that.
+##### Method 1: Easy Install (No PC Needed)
 
-You can setup ADB on your PC as described [here](https://tasker.joaoapps.com/userguide/en/help/ah_adb_setup.html).
+This method uses a special Tasker Task to install the APK directly on your device.
 
-**Note:** If it gives you a permission error, make sure to enable developer options and then disable the **Check apps installed via USB** option.
+1.  **Check Tasker Version**: Ensure you are using **Tasker version `6.6.11` or newer**, as this is required for the Shizuku integration to work. If your current version is older, check if a newer stable release is available. If not, you can get the latest beta version from [here](https://tasker.joaoapps.com/beta.html).
+2.  **Install Shizuku**: Make sure you have [Shizuku](https://github.com/RikkaApps/Shizuku/releases) installed and running.
+3.  **Import the Task**: Add the **Install APK** task to your Tasker from [this link](https://taskernet.com/shares/?user=AS35m8ne7oO4s%2BaDx%2FwlzjdFTfVMWstg1ay5AkpiNdrLoSXEZdFfw1IpXiyJCVLNW0yn&id=Task%3AInstall+APK).
+4.  **Run the Task**: Run the "Install APK" task and select the Tasker Settings APK file you downloaded. The task will use Shizuku to install the app with the necessary bypass flag (`--bypass-low-target-sdk-block`).
 
-**Note 2**: For reasons unknown, some antivirus programs may erroneously flag Tasker Settings as containing a virus or trojan. However, this is not the case. Tasker Settings is an open-source app, enabling you to scrutinize its code and functionality. If you opt not to install it, that decision is entirely yours to make. Rest assured, there is no actual threat. 😅
+##### Method 2: PC Install (Using ADB)
+
+If you prefer or cannot use the first method, you can install the app from a computer using ADB.
+
+1.  **Setup ADB**: You can find instructions for setting up ADB on your PC [here](https://tasker.joaoapps.com/userguide/en/help/ah_adb_setup.html).
+2.  **Run Install Command**: Use the following command to install the app:
+    ```
+    adb install --bypass-low-target-sdk-block FILENAME.apk
+    ```
+3.  **Troubleshooting**: If you get a permission error during ADB installation, go to your phone's Developer Options and disable "Check apps installed via USB" before trying again.
+
+#### Grant Permissions Manually
+
+**DO NOT grant permissions when the system prompts you.** The app may crash. You must grant permissions manually in system settings:
+
+1.  Go to Android Settings > Apps > Tasker Settings.
+2.  Select "Permissions" and grant the required permission there.
+
+**Note**: For reasons unknown, some antivirus programs may erroneously flag Tasker Settings as containing a virus or trojan. However, this is not the case. Tasker Settings is an open-source app, enabling you to scrutinize its code and functionality. If you opt not to install it, that decision is entirely yours to make. Rest assured, there is no actual threat. 😅
 
 
 ## Wifi Toggling
